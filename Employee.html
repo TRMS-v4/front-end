@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <title>employee</title>
+    </head>
+    <body class="p-3 mb-2 bg-warning text-dark"  onload="loadUser()">
+            <div class="p-3 mb-2 bg-success text-white text-center align-middle" id="top">  
+                <h1>Employee page</h1>
+            </div>
+           
+            <nav>
+                <button class="btn btn-primary" type="click" onclick="topBack()">top</button>
+                <button class="btn btn-primary" type="click" onclick="newRequest()">new request</button>
+                <button class="btn btn-primary" type= 'click' onclick="pullRecords()">records</button>
+
+                <button class="btn btn-primary" type="click" onclick="loggOut()">loggout</button>
+            </nav>
+            <div id="t1"></div>
+
+            <script>
+                function loadUser(){
+                    var p = JSON.parse(sessionStorage.getItem("user"))
+                    console.log(p);
+                    let table = document.createElement("table");
+                    table.setAttribute("class","table");
+                    let tr1 = document.createElement("tr");
+                    let td1 = document.createElement("td");
+                    td1.innerText = "Name"
+                    let td2 = document.createElement("td");
+                    td2.innerText = p["firstname"] +" "+p["lastname"];
+                    tr1.appendChild(td1);
+                    tr1.appendChild(td2);
+
+                    let tr2 = document.createElement("tr");
+                    let td3 = document.createElement("td");
+                    td3.innerText = "Position";
+                    let td4 = document.createElement("td");
+                    td4.innerText = "Employee";
+                    tr2.appendChild(td3);
+                    tr2.appendChild(td4);
+
+                    let tr3 = document.createElement("tr");
+                    let td5 = document.createElement("td");
+                    td5.innerText = "Reimb Limit";
+                    let td6 = document.createElement("td");
+                    td6.innerText = p["reimb_limit"];
+                    tr3.appendChild(td5);
+                    tr3.appendChild(td6);
+
+                    table.appendChild(tr1);
+                    table.appendChild(tr2);
+                    table.appendChild(tr3);
+
+                    
+                    let test = document.getElementById("t1");
+                    test.appendChild(table);
+                }
+
+                function loggOut(){
+                    console.log("clicked loggOut");
+                    sessionStorage.clear();
+                    xhttp = new XMLHttpRequest();
+                    xhttp.open("POST", "http://localhost:8080/project1/logout");
+                    xhttp.send();
+                    xhttp.onreadystatechange = function(){
+                        if(this.readyState == 4 && this.status == 200){
+                            console.log("session close");
+        
+                            window.location.href="index.html";
+                        }
+                        else{
+                            console.log("something wrong...");
+                            console.log(`readyState: ${this.readyState}`);
+                            console.log(`status: ${this.status}`);
+                        }
+                    }
+                }
+
+                function newRequest(){
+                        let t1 = document.getElementById("t1");
+                        t1.removeChild(t1.lastChild);
+
+                        let form = document.createElement("form");
+                        let div1 = document.createElement("div");
+                        div1.setAttribute("class", "form-group row");
+                        let lb1 = document.createElement("label");
+                        lb1.setAttribute("for", "start");
+                        lb1.setAttribute("class","col-sm-2 col-form-label")
+                        lb1.innerText ="Start Date ";
+                        
+                        let inputdiv1 = document.createElement("div");
+                        inputdiv1.setAttribute("class", "col-sm-10");
+                        let start = document.createElement("input");
+                        start.setAttribute("type", "Date");
+                        start.setAttribute("id", "start");
+                        start.setAttribute("name", "start")
+                        start.setAttribute("class", "form-control");
+                        inputdiv1.appendChild(start);
+                        div1.appendChild(lb1);
+                        div1.appendChild(inputdiv1);
+
+                        let div2 = document.createElement("div");
+                        div2.setAttribute("class", "form-group row");
+                        let lb2 = document.createElement("label");
+                        lb2.setAttribute("for", "end");
+                        lb2.innerText ="End Date ";
+                        lb2.setAttribute("class","col-sm-2 col-form-label")
+
+                        let inputdiv2 = document.createElement("div");
+                        inputdiv2.setAttribute("class", "col-sm-10");
+                        let end = document.createElement("input");
+                        end.setAttribute('type', "Date");
+                        end.setAttribute("id","end");
+                        end.setAttribute("name", "end");
+                        end.setAttribute("class", "form-control");
+                        inputdiv2.appendChild(end);
+                        div1.appendChild(lb2);
+                        div1.appendChild(inputdiv2);
+                        
+                        let div3 = document.createElement("div");
+                        div3.setAttribute("class", "form-group row");
+                        let lb3 = document.createElement("label");
+                        lb3.setAttribute("for", "sub");
+                        lb3.innerText = "Subject ";
+                        lb3.setAttribute("class","col-sm-2 col-form-label")
+
+
+                        let inputdiv3 = document.createElement("div");
+                        inputdiv3.setAttribute("class", "col-sm-10");
+                        let sub =  document.createElement("input");
+                        sub.setAttribute("type", "text");
+                        sub.setAttribute("id", "sub");
+                        sub.setAttribute("name", "sub");
+                        sub.setAttribute("class", "form-control");
+                        inputdiv3.appendChild(sub);
+                        div3.appendChild(lb3);
+                        div3.appendChild(inputdiv3);
+
+
+                        let div4 = document.createElement("div");
+                        div4.setAttribute("class", "form-group row");
+                        let lb4 = document.createElement("label");
+                        lb4.setAttribute("for", "gradef");
+                        lb4.innerText = "Grade format ";
+                        lb4.setAttribute("class","col-sm-2 col-form-label")
+
+                        let inputdiv4 = document.createElement("div");
+                        inputdiv4.setAttribute("class", "col-sm-10");
+                        let gradef = document.createElement("select");
+                        gradef.setAttribute("id", "gradef");
+                        gradef.setAttribute("name", "gradef");
+                        gradef.setAttribute("class", "form-control");
+                        inputdiv4.appendChild(gradef);
+                        div4.appendChild(lb4);
+                        div4.appendChild(inputdiv4);
+
+                        let op1 = document.createElement("option");
+                        op1.setAttribute("value","letter grade");
+                        op1.innerText = "letter grade";
+
+                        let op2 = document.createElement("option");
+                        op2.setAttribute("value","pass fail");
+                        op2.innerText = "pass fail";
+                        gradef.appendChild(op1);
+                        gradef.appendChild(op2);
+
+
+                        let div5 = document.createElement("div");
+                        div5.setAttribute("class", "form-group row");
+                        let lb5 = document.createElement("label");
+                        lb5.setAttribute("for", "inst");
+                        lb5.innerText = "Institution ";
+                        lb5.setAttribute("class","col-sm-2 col-form-label")
+
+                        let inputdiv5 = document.createElement("div");
+                        inputdiv5.setAttribute("class", "col-sm-10");
+                        let inst = document.createElement("select");
+                        inst.setAttribute("id", "inst");
+                        inst.setAttribute("name", "inst");
+                        inst.setAttribute("class", "form-control");
+                        inputdiv5.appendChild(inst);
+                        div5.appendChild(lb5);
+                        div5.appendChild(inputdiv5);
+
+                        op3 = document.createElement("option");
+                        op3.setAttribute("value","university");
+                        op3.innerText = "university";
+
+                        op4 = document.createElement("option");
+                        op4.setAttribute("value","seminar");
+                        op4.innerText = "seminar";
+
+                        let op5 = document.createElement("option");
+                        op5.setAttribute("value", "preparation");
+                        op5.innerText ="preparation";
+
+                        let op6 = document.createElement("option");
+                        op6.setAttribute("value", "certification");
+                        op6.innerText = "certification";
+
+                        let op7 = document.createElement("option");
+                        op7.setAttribute("value", "tech-training");
+                        op7.innerText = "tech-training";
+
+                        inst.appendChild(op3);
+                        inst.appendChild(op4);
+                        inst.appendChild(op5);
+                        inst.appendChild(op6);
+                        inst.appendChild(op7);
+                         
+                        let div6 = document.createElement("div");
+                        div6.setAttribute("class", "form-group row");
+                        let lb6 = document.createElement("label");
+                        lb6.setAttribute("for", "loc");
+                        lb6.innerText = "Location ";
+                        lb6.setAttribute("class","col-sm-2 col-form-label")
+
+                        let inputdiv6 = document.createElement("div");
+                        inputdiv6.setAttribute("class", "col-sm-10");
+                        let loc = document.createElement("input");
+                        loc.setAttribute("type", "text");
+                        loc.setAttribute("id", "loc");
+                        loc.setAttribute("name", "loc");
+                        loc.setAttribute("class", "form-control");
+                        inputdiv6.appendChild(loc);
+                        div6.appendChild(lb6);
+                        div6.appendChild(inputdiv6);
+
+
+                        let div7 = document.createElement("div");
+                        div7.setAttribute("class", "form-group row");
+                        let lb7 = document.createElement("label");
+                        lb7.setAttribute("for", "des")
+                        lb7.innerText = "Description "
+                        lb7.setAttribute("class","col-sm-2 col-form-label")
+
+                        let inputdiv7 = document.createElement("div");
+                        inputdiv7.setAttribute("class", "col-sm-10");
+                        let des = document.createElement("input");
+                        des.setAttribute("type", "area");
+                        des.setAttribute("id", "des");
+                        des.setAttribute("name", "des");
+                        des.setAttribute("class", "form-control");
+                        inputdiv7.appendChild(des);
+                        div7.appendChild(lb7);
+                        div7.appendChild(inputdiv7);
+
+                        let div8 = document.createElement("div");
+                        div8.setAttribute("class", "form-group row");
+                        let lb8 = document.createElement("label");
+                        lb8.setAttribute("for", "cost");
+                        lb8.innerText = "Course fee ";
+                        lb8.setAttribute("class","col-sm-2 col-form-label")
+
+                        let inputdiv8 = document.createElement("div");
+                        inputdiv8.setAttribute("class", "col-sm-10");
+                        let cost = document.createElement("input");
+                        cost.setAttribute("type", "number");
+                        cost.setAttribute("min", "0");
+                        cost.setAttribute("max", "1000");
+                        cost.setAttribute("step", "0.01");
+                        cost.setAttribute("id", "cost");
+                        cost.setAttribute("name", "cost");
+                        cost.setAttribute("class", "form-control");
+                        inputdiv8.appendChild(cost);
+                        div8.appendChild(lb8);
+                        div8.appendChild(inputdiv8);
+
+                        let submit = document.createElement("input");
+                        submit.setAttribute("type", "button");
+                        submit.setAttribute("id", "submit");
+                        submit.setAttribute("value", "submit");
+                        submit.setAttribute("onclick","handleSubmit()");
+                        submit.setAttribute("class","btn btn-outline-primary");
+                        
+                        form.appendChild(div1);
+                        form.appendChild(div2);
+                        form.appendChild(div3);
+                        form.appendChild(div4);
+                        form.appendChild(div5);
+                        form.appendChild(div6);
+                        form.appendChild(div7);
+                        form.appendChild(div8);
+                        form.appendChild(submit);
+                        t1.appendChild(form);
+                       
+                    }
+               
+                function handleSubmit(){
+                   
+                    console.log("click on submit")
+                    var p = JSON.parse(sessionStorage.getItem("user"))
+                    console.log(p)
+
+
+                    let start = document.getElementById("start").value;
+                    let end = document.getElementById("end").value;
+                    let subject = document.getElementById("sub").value;
+                    let gradef = document.getElementById("gradef").value;
+                    let inst = document.getElementById("inst").value;
+                    let loc = document.getElementById("loc").value;
+                    let des = document.getElementById("des").value;
+                    let cost = document.getElementById("cost").value;
+                    cePackage = {p_id: p.p_id, start, end:end, subject:subject, grade_format:gradef,inst:inst, loc:loc,des:des,cost:cost}
+                    sessionStorage.setItem("cePackage",JSON.stringify(cePackage));
+                    
+                    console.log(cePackage);
+
+                    xhttp = new XMLHttpRequest();
+                    xhttp.open("POST","http://localhost:8080/project1/requestreimb");
+                    xhttp.send(JSON.stringify(cePackage));
+
+                    xhttp.onreadystatechange = ()=>{
+                        if(xhttp.readyState == 4 && xhttp.status == 200){
+                            console.log(xhttp.responseText)
+                            sessionStorage.setItem("reimb",xhttp.responseText);
+                            var rb = JSON.parse(sessionStorage.getItem("reimb"));
+                        
+                            let t1 = document.getElementById("t1");
+                            if(t1.hasChildNodes()){
+                                t1.removeChild(t1.lastChild);
+                            }
+                            
+                            let table = document.createElement("table");
+                            table.setAttribute("class","table");
+                            let tr1 = document.createElement("tr");
+                            let td1 = document.createElement("td");
+                            td1.innerText = "reimb id"
+                            let td2 = document.createElement("td");
+                            td2.innerText = rb["reimb_id"];
+                            tr1.appendChild(td1);
+                            tr1.appendChild(td2);
+
+                            let tr2 = document.createElement("tr");
+                            let td3 = document.createElement("td");
+                            td3.innerText = "Amount";
+                            let td4 = document.createElement("td");
+                            td4.innerText = rb["reimb_amount"];
+                            tr2.appendChild(td3);
+                            tr2.appendChild(td4);
+
+                            let tr3 = document.createElement("tr");
+                            let td5 = document.createElement("td");
+                            td5.innerText = "Reimb Limit";
+                            let td6 = document.createElement("td");
+                            td6.innerText = rb["reimb_amount"];
+                            tr3.appendChild(td5);
+                            tr3.appendChild(td6);
+
+                            let tr4 = document.createElement("tr");
+                            let td7= document.createElement("td");
+                            td7.innerText = "subject";
+                            let td8 = document.createElement("td");
+                            td8.innerText = cePackage["subject"];
+                            tr4.appendChild(td7);
+                            tr4.appendChild(td8);
+
+                            let tr5 = document.createElement("tr");
+                            let td9= document.createElement("td");
+                            td9.innerText = "start";
+                            let td10 = document.createElement("td");
+                            td10.innerText = cePackage["start"];
+                            tr5.appendChild(td9);
+                            tr5.appendChild(td10);
+
+                            let tr6 = document.createElement("tr");
+                            let td11= document.createElement("td");
+                            td11.innerText = "end";
+                            let td12 = document.createElement("td");
+                            td12.innerText = cePackage["end"];
+                            tr6.appendChild(td11);
+                            tr6.appendChild(td12);
+
+                            let tr7 = document.createElement("tr");
+                            let td13= document.createElement("td");
+                            td13.innerText = "institution";
+                            let td14 = document.createElement("td");
+                            td14.innerText = cePackage["inst"];
+                            tr7.appendChild(td13);
+                            tr7.appendChild(td14);
+
+                            table.appendChild(tr1);
+                            table.appendChild(tr2);
+                            table.appendChild(tr3);
+                            table.appendChild(tr4);
+                            table.appendChild(tr5);
+                            table.appendChild(tr6);
+                            table.appendChild(tr7);
+
+        
+                            t1.appendChild(table);
+
+
+                        }else{
+                            console.log(`readyState ${xhttp.readyState}`);
+                            console.log(`status: ${xhttp.status}`);
+                        }
+                    }
+
+                }
+
+                const topBack = () =>{
+                    let test = document.getElementById("t1");
+                    if(test.hasChildNodes()){
+                        test.removeChild(test.lastChild);
+                    }
+                   
+                    var p = JSON.parse(sessionStorage.getItem("user"))
+                    console.log(p);
+                    let table = document.createElement("table");
+                    table.setAttribute("class","table");
+                    let tr1 = document.createElement("tr");
+                    let td1 = document.createElement("td");
+                    td1.innerText = "Name"
+                    let td2 = document.createElement("td");
+                    td2.innerText = p["firstname"] +" "+p["lastname"];
+                    tr1.appendChild(td1);
+                    tr1.appendChild(td2);
+
+                    let tr2 = document.createElement("tr");
+                    let td3 = document.createElement("td");
+                    td3.innerText = "Position";
+                    let td4 = document.createElement("td");
+                    td4.innerText = "Employee";
+                    tr2.appendChild(td3);
+                    tr2.appendChild(td4);
+
+                    let tr3 = document.createElement("tr");
+                    let td5 = document.createElement("td");
+                    td5.innerText = "Reimb Limit";
+                    let td6 = document.createElement("td");
+                    td6.innerText = p["reimb_limit"];
+                    tr3.appendChild(td5);
+                    tr3.appendChild(td6);
+
+                    table.appendChild(tr1);
+                    table.appendChild(tr2);
+                    table.appendChild(tr3);
+                    
+                    t1.appendChild(table);
+                }
+
+                const pullRecords = () =>{
+                    console.log("clicked pullrecords");
+                    let test = document.getElementById("t1");
+                    test.removeChild(test.lastChild);
+                    var p = JSON.parse(sessionStorage.getItem("user"))
+                    console.log(p);
+                    xhttp = new XMLHttpRequest();
+                    xhttp.open("POST", "http://localhost:8080/project1/employeerecords");
+
+                    // let p_id = {p_id:p["p_id"]}
+                    // console.log(p_id);
+                    let pPack = JSON.stringify(p);
+                    console.log(pPack);
+                    xhttp.send(pPack);
+
+                    xhttp.onreadystatechange = () =>{
+                        if(xhttp.readyState == 4 && xhttp.status == 200){
+                            console.log(xhttp.responseText);
+                            let rbList = JSON.parse(xhttp.responseText);
+                            console.log(rbList);
+                            let table = document.createElement("table");
+                            table.setAttribute("class","table");
+                            let tr1 = document.createElement("tr");
+                            let th1 = document.createElement("th");
+                            th1.setAttribute("scope","col");
+                            th1.innerText = "Reimb id";
+                            let th2 = document.createElement("th");
+                            th2.setAttribute("scope","col");
+                            th2.innerText = "Amount";
+                            let th3 = document.createElement("th");
+                            th3.setAttribute("scope","col");
+                            th3.innerText = "Manager approval";
+                            let th4 = document.createElement("th");
+                            th4.setAttribute("scope","col");
+                            th4.innerText = "Department approval";
+                            let th5 = document.createElement("th");
+                            th5.setAttribute("scope","col");
+                            th5.innerText = "BenCo approval";
+                            tr1.appendChild(th1);
+                            tr1.appendChild(th2);
+                            tr1.appendChild(th3);
+                            tr1.appendChild(th4);
+                            tr1.appendChild(th5);
+                            table.appendChild(tr1);
+                            test.appendChild(table);
+
+
+                            Object.values(rbList).forEach(value =>{
+                                let tr = document.createElement("tr");
+                                let td1 = document.createElement("td");
+                                td1.innerText = value["reimb_id"];
+                                let td2 = document.createElement("td");
+                                td2.innerText = value["reimb_amount"];
+                                let td3 = document.createElement("td");
+                                td3.innerText = value["sAppr"]? "Approval":"pending";
+                                let td4 = document.createElement("td");
+                                td4.innerText = value["deptHeadAppr"]? "Approval":"pending";
+                                let td5 = document.createElement("td");
+                                td5.innerText = value["bencoAppr"]? "Approval":"pending";
+                                tr.appendChild(td1);
+                                tr.appendChild(td2);
+                                tr.appendChild(td3);
+                                tr.appendChild(td4);
+                                tr.appendChild(td5);
+                                table.appendChild(tr);
+                            })
+
+                        }
+                    }
+                }
+
+            </script>
+           
+    </body>
+    
+</html>

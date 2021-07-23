@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <style>
+            #top{
+                height: 30vh;
+            }
+            #bottom{
+                margin-top:10rem;
+            }
+    
+        </style>
+          <title>index</title>  
+    </head>
+    <body class="p-3 mb-2 bg-warning text-dark">
+        <div class="p-3 mb-2 bg-success text-white text-center align-middle" id="top">
+            <h1>Tuition Reimbursement Management System</h1>
+        </div>
+        
+        <div class="nav justify-content-center" id="bottom">
+            <button type="button" class="btn btn-outline-primary align-middle" onclick="loginDirect()">login</button>
+            <button type="button" class="btn btn-outline-primary align-middle" onclick="signUpDirect()">sign up</button>
+        </div>
+       
+        <script>
+            const loginDirect = () => {
+                window.location.href="login.html";
+            }
+            const signUpDirect = () => {
+                window.location.href="signup.html";
+            }
+            
+        </script>
+    </body>
+
+
+</html>

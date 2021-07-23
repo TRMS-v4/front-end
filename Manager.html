@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <title>manager page</title>
+    </head>
+    <body  class="p-3 mb-2 bg-warning text-dark" onload="loadUser()">
+        <div class="p-3 mb-2 bg-success text-white text-center align-middle" id="top">  
+            <h1>Manager</h1>
+        </div>
+        
+        <nav>
+            <button class="btn btn-primary" type="click" onclick="topBack()">top</button>
+            <button class="btn btn-primary" type='click' onclick="getPending()">pending approval</button>
+            <button class="btn btn-primary" type="click" onclick="loggOut()">loggout</button>
+        </nav>>
+
+        <div id="t1"></div>
+        <script>
+             function loadUser(){
+                    var p = JSON.parse(sessionStorage.getItem("user"))
+                    console.log(p);
+                    let table = document.createElement("table");
+                    table.setAttribute("class","table");
+                    let tr1 = document.createElement("tr");
+                    let td1 = document.createElement("td");
+                    td1.innerText = "Name"
+                    let td2 = document.createElement("td");
+                    td2.innerText = p["firstname"] +" "+p["lastname"];
+                    tr1.appendChild(td1);
+                    tr1.appendChild(td2);
+
+                    let tr2 = document.createElement("tr");
+                    let td3 = document.createElement("td");
+                    td3.innerText = "Position";
+                    let td4 = document.createElement("td");
+                    td4.innerText = "Manager";
+                    tr2.appendChild(td3);
+                    tr2.appendChild(td4);
+
+
+                    table.appendChild(tr1);
+                    table.appendChild(tr2);
+
+                    
+                    let test = document.getElementById("t1");
+                    test.appendChild(table);
+                }
+            function loggOut(){
+                    console.log("clicked loggOut");
+                    sessionStorage.clear();
+                    xhttp = new XMLHttpRequest();
+                    xhttp.open("POST", "http://localhost:8080/project1/logout");
+                    xhttp.send();
+                    xhttp.onreadystatechange = function(){
+                        if(this.readyState == 4 && this.status == 200){
+                            console.log("session close");
+        
+                            window.location.href="index.html";
+                        }
+                        else{
+                            console.log("something wrong...");
+                            console.log(`readyState: ${this.readyState}`);
+                            console.log(`status: ${this.status}`);
+                        }
+                    }
+                }
+
+                const topBack = () =>{
+                    let test = document.getElementById("t1");
+                    if(test.hasChildNodes()){
+                        test.removeChild(test.lastChild);
+                        test.removeChild(test.lastChild);
+                    }
+                   
+                    var p = JSON.parse(sessionStorage.getItem("user"))
+                    console.log(p);
+                    let table = document.createElement("table");
+                    table.setAttribute("class","table");
+                    let tr1 = document.createElement("tr");
+                    let td1 = document.createElement("td");
+                    td1.innerText = "Name"
+                    let td2 = document.createElement("td");
+                    td2.innerText = p["firstname"] +" "+p["lastname"];
+                    tr1.appendChild(td1);
+                    tr1.appendChild(td2);
+
+                    let tr2 = document.createElement("tr");
+                    let td3 = document.createElement("td");
+                    td3.innerText = "Position";
+                    let td4 = document.createElement("td");
+                    td4.innerText = "Manager";
+                    tr2.appendChild(td3);
+                    tr2.appendChild(td4);
+
+                    let tr3 = document.createElement("tr");
+                    let td5 = document.createElement("td");
+                    td5.innerText = "Reimb Limit";
+                    let td6 = document.createElement("td");
+                    td6.innerText = p["reimb_limit"];
+                    tr3.appendChild(td5);
+                    tr3.appendChild(td6);
+
+                    table.appendChild(tr1);
+                    table.appendChild(tr2);
+                    table.appendChild(tr3);
+                    
+                    test.appendChild(table);
+                }
+
+                const getPending = () =>{
+                    let test = document.getElementById("t1");
+                    if(test.hasChildNodes()){
+                        test.removeChild(test.lastChild);
+                    }
+
+                    xhttp = new XMLHttpRequest();
+                    xhttp.open("GET", "http://localhost:8080/project1/managerpending");
+                    xhttp.send();
+                    xhttp.onreadystatechange = function(){
+                        if(this.readyState == 4 && this.status == 200){
+                            sessionStorage.setItem("rbList",xhttp.responseText);
+                            let rbList = JSON.parse(xhttp.responseText);
+                            console.log(rbList);
+                            let table = document.createElement("table");
+                            table.setAttribute("class","table");
+                            let tr1 = document.createElement("tr");
+                            let th1 = document.createElement("th");
+                            th1.innerText = "Reimb id";
+                            let th2 = document.createElement("th");
+                            th2.innerText = "Amount";
+                            let th3 = document.createElement("th");
+                            th3.innerText = "Manager approval";
+                            let th4 = document.createElement("th");
+                            th4.innerText = "Department approval";
+                            let th5 = document.createElement("th");
+                            th5.innerText = "BenCo approval";
+                            let th6 = document.createElement("th");
+                            th6.innerText = "approve";
+
+                            tr1.appendChild(th1);
+                            tr1.appendChild(th2);
+                            tr1.appendChild(th3);
+                            tr1.appendChild(th4);
+                            tr1.appendChild(th5);
+                            tr1.appendChild(th6);
+                            table.appendChild(tr1);
+                            test.appendChild(table);
+
+                            let counter =0;
+                            Object.values(rbList).forEach(value =>{
+                                let tr = document.createElement("tr");
+                                let td1 = document.createElement("td");
+                                td1.innerText = value["reimb_id"];
+                                let td2 = document.createElement("td");
+                                td2.innerText = value["reimb_amount"];
+                                let td3 = document.createElement("td");
+                                td3.innerText = value["sAppr"]? "Approved":"pending";
+                                let td4 = document.createElement("td");
+                                td4.innerText = value["deptHeadAppr"]? "Approved":"pending";
+                                let td5 = document.createElement("td");
+                                td5.innerText = value["bencoAppr"]? "Approved":"pending";
+                                let td6 = document.createElement("td");
+                                let checkbox = document.createElement("input");
+                                checkbox.setAttribute("type","checkbox");
+                                checkbox.setAttribute("id",`${counter}`);
+                                checkbox.setAttribute("name", "checker");
+                                counter +=1;
+                                console.log("checkbox id: "+ checkbox.id);
+                                td6.appendChild(checkbox);
+
+                                tr.appendChild(td1);
+                                tr.appendChild(td2);
+                                tr.appendChild(td3);
+                                tr.appendChild(td4);
+                                tr.appendChild(td5);
+                                tr.appendChild(td6);
+                                table.appendChild(tr);
+                            })
+                            let button = document.createElement("button");
+                           
+                            button.setAttribute("type","click");
+                            button.setAttribute("onclick","addCheckedItem()");
+                            button.setAttribute("class","btn btn-outline-primary")
+                            button.innerText ="submit";
+                            test.appendChild(button);
+                        }
+                        else{
+                            console.log("something wrong...");
+                            console.log(`readyState: ${this.readyState}`);
+                            console.log(`status: ${this.status}`);
+                        }
+                    }
+                }
+
+                const addCheckedItem = () =>{
+                    const checkboxes = document.querySelectorAll('input[name="checker"]:checked');
+                    let rbList = JSON.parse(sessionStorage.getItem("rbList"));
+                    let updateList = [];
+                    checkboxes.forEach(check => {
+                        updateList.push(rbList[check.id]);
+                    });
+                    console.log(updateList);
+                    xhttp = new XMLHttpRequest();
+                    xhttp.open("POST", "http://localhost:8080/project1/managerappr");
+                    xhttp.send(JSON.stringify(updateList));
+                    if(xhttp.readyState == 4 && xhttp.status == 200){
+                       Console.log(xhttp.responseText);
+                    }
+                    else{
+                            console.log("something wrong...");
+                            console.log(`readyState: ${xhttp.readyState}`);
+                            console.log(`status: ${xhttp.status}`);
+                        }
+                    let test = document.getElementById("t1");
+                    if(test.hasChildNodes()){
+                        test.removeChild(test.lastChild);
+                        
+                    }
+                    getPending();
+
+                }
+        </script>
+    </body>
+</html>
